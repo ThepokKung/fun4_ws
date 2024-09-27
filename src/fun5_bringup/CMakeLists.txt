@@ -51,6 +51,8 @@ install(TARGETS
 install(DIRECTORY
   config
   launch
+  meshes
+  robot
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()

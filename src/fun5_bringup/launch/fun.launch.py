@@ -34,37 +34,29 @@ def generate_launch_description():
     
     path_description = os.path.join(pkg,'robot','visual','my-robot.xacro')
     robot_desc_xml = xacro.process_file(path_description).toxml()
+    #robot_desc_xml = xacro.process_file(path_description,mappings={'robot_name': namespace}).toxml()
     
     parameters = [{'robot_description':robot_desc_xml}]
+    #parameters.append({'frame_prefix':namespace+'/'})
     robot_state_publisher = Node(package='robot_state_publisher',
                                   executable='robot_state_publisher',
                                   output='screen',
                                   parameters=parameters
     )
 
+    joint_state_publisher_gui = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui'
+    )
+
+    # random_node = Node(
+    #     package='random_target',
+    #     executable='random.py'
+    # )
     launch_description = LaunchDescription()
     
     launch_description.add_action(rviz)
     launch_description.add_action(robot_state_publisher)
-
-    """Define"""
-    fun5_bringup_pkg = 'fun5_bringup'
-
-    contoller_node = Node(
-            package=fun5_bringup_pkg,
-            namespace='',
-            executable='controller_node.py',
-            name='controller_node'
-        )
+    # launch_description.add_action(joint_state_publisher_gui)
     
-    launch_description.add_action(contoller_node)
-
-    randomtarget_node = Node(
-            package=fun5_bringup_pkg,
-            namespace='',
-            executable='randomtarget_node.py',
-            name='randomtarget_node'
-        )
-    
-    launch_description.add_action(randomtarget_node)
     return launch_description
