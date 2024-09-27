@@ -32,6 +32,7 @@ class ControllerNode(Node):
         """PUB"""
         self.joint_pub = self.create_publisher(JointState, "/joint_states", 10)
         self.endeffector_pub = self.create_publisher(PoseStamped, "/end_effector", 10)  
+        self.target_pub = self.create_publisher(PoseStamped,'/target',10) 
 
         """VALUE"""
         self.mode_sate = 0
@@ -89,7 +90,7 @@ class ControllerNode(Node):
             msg.position.append(self.q[i])
             msg.name.append(self.name[i])
 
-        if all(abs(self.q[i] - self.target_q[i]) <= 1 for i in range(len(self.q))):
+        if all(abs(self.q[i] - self.target_q[i]) <= 0.1 for i in range(len(self.q))):
             self.controll_state = 1
 
         self.joint_pub.publish(msg)
@@ -136,6 +137,18 @@ class ControllerNode(Node):
         msg.pose.position.z = end_effector_pose.t[2] /1000
 
         self.endeffector_pub.publish(msg)
+    
+    def targetpub_func(self,x,y,z):
+        msg = PoseStamped()
+        msg.header.frame_id = 'link_0'
+        msg.header.stamp = self.get_clock().now().to_msg()
+
+        msg.pose.position.x = x /1000
+        msg.pose.position.y = y /1000
+        msg.pose.position.z = z /1000
+
+        self.get_logger().info(f'Pub target data x :{msg.pose.position.x}, y : {msg.pose.position.y},z : {msg.pose.position.z}')
+        self.target_pub.publish(msg)
 
     def Gettatget_client_func(self):
         command_request = Gettarget.Request()
@@ -157,6 +170,8 @@ class ControllerNode(Node):
                         self.controll_state = 2
                         self.target_q = find_ikine
                         self.get_logger().info('We can go to postition wait for going')
+                        self.targetpub_func(x_data, y_data, z_data)
+
                 else:
                     pass
             else:

@@ -13,8 +13,7 @@ import numpy as np
 class RandomtargetposeNode(Node):
     def __init__(self):
         super().__init__('randomtargetpose_node')
-        """PUB"""
-        self.target_pub = self.create_publisher(PoseStamped,'/target',10) # Target Pub
+        
 
         """CSV PATH"""
         csv_file_path = os.path.join(
@@ -39,23 +38,11 @@ class RandomtargetposeNode(Node):
             response.ztarget = float(z_random)
             response.success = True
             response.message = f'get target : x : {x_random}, y : {y_random}, z : {z_random}'
-            self.targetpub_func(x_random, y_random, z_random)
         else:
             response.success = False
             response.message = "Notthing ....."
         return response
 
-    def targetpub_func(self,x,y,z):
-        msg = PoseStamped()
-        msg.header.frame_id = 'link_0'
-        msg.header.stamp = self.get_clock().now().to_msg()
-
-        msg.pose.position.x = x /1000
-        msg.pose.position.y = y /1000
-        msg.pose.position.z = z /1000
-
-        self.get_logger().info(f'Pub target data x :{msg.pose.position.x}, y : {msg.pose.position.y},z : {msg.pose.position.z}')
-        self.target_pub.publish(msg)
     
 def main(args=None):
     rclpy.init(args=args)
