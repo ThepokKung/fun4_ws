@@ -1,0 +1,6 @@
+float64 xgoal
+float64 ygoal
+float64 zgoal
+---
+bool success
+string message
