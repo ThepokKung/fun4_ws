@@ -58,7 +58,7 @@ class ControllerNode(Node):
         self.name = ["joint_1", "joint_2", "joint_3", "joint_4"]
         self.q = [0.0, 0.5, 1.4,0.0]
         self.target_q = [0.0,0.0,0.0,0.0]
-        self.max_w = 2
+        self.max_w = 1.5
 
         """ROBOT TIMER"""
         self.dt = 0.01
@@ -72,6 +72,9 @@ class ControllerNode(Node):
         msg.header.stamp = self.get_clock().now().to_msg()
 
         for i in range(len(self.q)):
+
+            if self.mode_sate == 3 and self.controll_state == 1:
+                self.Gettatget_client_func()
             
             delta_q = self.target_q[i] - self.q[i]
 

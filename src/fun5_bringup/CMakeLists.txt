@@ -50,6 +50,7 @@ install(TARGETS
 ################ INSTALL LAUNCH, ETC #################
 install(DIRECTORY
   config
+  launch
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
