@@ -10,24 +10,18 @@
 
 ![](image/robot1.png)
 
-[รูป Cad หุ่น]
-
 
 ![](image/DP-raram.png)
 
-[รูป DH Param]
 
 เราได้สร้างcode ที่ใช้ในการหา WorkSpace โดยนำ Code จาก HW2_Kinematic มาดัดแปลงและนำมาใช้งาน
 (Folder อยู่ใน fun5_ws/src/Python_Proof/find_ws_and_test.ipynb)
 
 ![](image/1-3.gif)
 
-[GIF Kinimatic code]
-
 เราได้ทำการหาค่าสูงสุดที่หุ่นเราสามารถเคลื่อนที่ได้จากการ plot รูป
 
 ![](image/1-4.png)
-[รูปที่ได้จากการ Plot]
 
 เราจะได้ค่า Max, min ของแต่ละตัวมาได้ดังนี้
 และเราได้ทำการเก็บค่าตำแหน่งทุกจุดที่ได้ใน WorkSpace มาเก็บไว้เป็นไฟล์ CSV (ตอนแรกผู้จัดทำจะใช้ yaml แต่เนื่องจากค่าเยอะเกินไปทำให้อ่านไม่ได้... เลยเปลี่ยนมาใช้ CSV)
@@ -44,8 +38,6 @@
 ![](image/1-6.png)
 
 
-[รูปที่แสดงผลใน RVIZ2]
-
 ### Part1.3 ทำการส่งตำแหน่งปลายมือแขนกล
 
 ส่งต่ำแหน่งปลายมือของแขนกลผ่าน Topic 
@@ -57,7 +49,6 @@
 
 ![](image/1-5.png)
 
-[รูปที่แสดงผลผ่าน RVIZ2]
 
 ตำแหน่งปลายมือมาจากเราหา FK จาก Q ต่างๆใน Controller node ของเรา
 ## Part 2 Descrption
@@ -82,13 +73,9 @@ Mode (Teleop) และ Autonomous Mode (Auto)
 
 ![](image/2-1.gif)
 
-[รูป RQT gif ของ Mode]
-
 * /target_mannal ใช้สำหรับการส่งค่าตำแหน่งที่จะให้ End_effector ไปโดยเราจะกรอกลงไปผ่าน RQT
 ![](image/2-2.png)
 
-
-[รูป RQT gif ของ /target_mannal]
 
 * /checkcontroller_state ใช้เช็คว่า Controller ของเรากำลังทำงานอยู่หรือไม่
 
