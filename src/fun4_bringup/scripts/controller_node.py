@@ -6,7 +6,7 @@ from rclpy.node import Node
 import roboticstoolbox as rtb
 import numpy as np
 
-from fun5_interfaces.srv import Modeselect,Datapoint,Checkstate,Gettarget
+from fun4_interfaces.srv import Modeselect,Datapoint,Checkstate,Gettarget
 from geometry_msgs.msg import PoseStamped
 from spatialmath import *
 from sensor_msgs.msg import JointState

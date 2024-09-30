@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 
 from geometry_msgs.msg import PoseStamped
-from fun5_interfaces.srv import Gettarget
+from fun4_interfaces.srv import Gettarget
 from ament_index_python.packages import get_package_share_directory
 import os, yaml, random
 import numpy as np

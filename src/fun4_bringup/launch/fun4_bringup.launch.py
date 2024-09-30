@@ -6,7 +6,7 @@ import xacro
     
 def generate_launch_description():
     
-    pkg = get_package_share_directory('fun5_bringup')
+    pkg = get_package_share_directory('fun4_bringup')
     rviz_path = os.path.join(pkg,'config','display.rviz')
     rviz = Node(
         package='rviz2',
@@ -31,10 +31,10 @@ def generate_launch_description():
     launch_description.add_action(robot_state_publisher)
 
     """Define"""
-    fun5_bringup_pkg = 'fun5_bringup'
+    fun4_bringup_pkg = 'fun4_bringup'
 
     contoller_node = Node(
-            package=fun5_bringup_pkg,
+            package=fun4_bringup_pkg,
             namespace='',
             executable='controller_node.py',
             name='controller_node'
@@ -43,7 +43,7 @@ def generate_launch_description():
     launch_description.add_action(contoller_node)
 
     randomtarget_node = Node(
-            package=fun5_bringup_pkg,
+            package=fun4_bringup_pkg,
             namespace='',
             executable='randomtarget_node.py',
             name='randomtarget_node'

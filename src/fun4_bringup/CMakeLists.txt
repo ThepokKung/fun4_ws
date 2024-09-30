@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(fun5_bringup)
+project(fun4_bringup)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -28,11 +28,9 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   scripts/randomtarget_node.py
-  scripts/jointstate_script.py
   scripts/controller_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
-
 
 # Include Cpp "include" directory
 include_directories(include)
@@ -43,7 +41,7 @@ ament_target_dependencies(cpp_node_test rclcpp)
 
 # Install Cpp executables
 install(TARGETS
-  cpp_node_test
+  # cpp_node_test
   DESTINATION lib/${PROJECT_NAME}
 )
 
