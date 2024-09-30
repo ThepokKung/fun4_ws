@@ -42,9 +42,10 @@ class ControllerNode(Node):
         self.create_service(Datapoint,'/target_mannal',self.Datapoint_callback) #Data Point
         self.create_service(Checkstate,'/checkcontroller_state',self.Checkcontrollerstate_callback)
         self.create_service(Checkstate,'/checkmode_state',self.Checkmode_callback)
-        
+
         """Clinet"""
         self.gettarget_client = self.create_client(Gettarget,'/get_target')
+        self.targetdeone_client = self.create_client(Checkstate,'/targetdone_state')
 
         """ROBOT"""
         self.robot = rtb.DHRobot([
@@ -73,9 +74,10 @@ class ControllerNode(Node):
 
         for i in range(len(self.q)):
 
-            if self.mode_sate == 3 and self.controll_state == 1:
+            if self.mode_sate == 3 and self.controll_state == 1 and not self.requesttarget_state:
                 self.Gettatget_client_func()
                 self.requesttarget_state = True
+                # self.requesttarget_state = True
             
             delta_q = self.target_q[i] - self.q[i]
 
@@ -91,6 +93,9 @@ class ControllerNode(Node):
             msg.name.append(self.name[i])
 
         if all(abs(self.q[i] - self.target_q[i]) <= 0.1 for i in range(len(self.q))):
+            if self.controll_state == 2:
+                self.Targetdone_pub_fuc()
+                self.requesttarget_state = False
             self.controll_state = 1
 
         self.joint_pub.publish(msg)
@@ -137,19 +142,21 @@ class ControllerNode(Node):
         msg.pose.position.z = end_effector_pose.t[2] /1000
 
         self.endeffector_pub.publish(msg)
+
+    def Targetdone_pub_fuc(self):
+        msg = Checkstate.Request()
+        msg.checkstate = True
+        future = self.targetdeone_client.call_async(msg)
+        future.add_done_callback(lambda future: self.Targetdone_response_callback(future))
+
+    def Targetdone_response_callback(self,future):
+        try:
+            response = future.result()
+            if response.success:
+                self.get_logger().info('Target done acknowledged by random node')
+        except Exception as e:
+            self.get_logger().error(f"Failed to notify random node: {e}")
     
-    def targetpub_func(self,x,y,z):
-        msg = PoseStamped()
-        msg.header.frame_id = 'link_0'
-        msg.header.stamp = self.get_clock().now().to_msg()
-
-        msg.pose.position.x = x /1000
-        msg.pose.position.y = y /1000
-        msg.pose.position.z = z /1000
-
-        self.get_logger().info(f'Pub target data x :{msg.pose.position.x}, y : {msg.pose.position.y},z : {msg.pose.position.z}')
-        self.target_pub.publish(msg)
-
     def Gettatget_client_func(self):
         command_request = Gettarget.Request()
         command_request.getdata = True
@@ -170,7 +177,7 @@ class ControllerNode(Node):
                         self.controll_state = 2
                         self.target_q = find_ikine
                         self.get_logger().info('We can go to postition wait for going')
-                        self.targetpub_func(x_data, y_data, z_data)
+                        # self.targetpub_func(x_data, y_data, z_data)
                 else:
                     pass
             else:
@@ -241,7 +248,9 @@ class ControllerNode(Node):
             response.message = f'Now mode state is {self.mode_sate}'
             self.get_logger().info(f'Now mode state is {self.mode_sate}')
         return response
-        
+    
+    
+
 def main(args=None):
     rclpy.init(args=args)
     node = ControllerNode()

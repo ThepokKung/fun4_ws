@@ -1,0 +1,42 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/kraiwich/fun4_ws/install/fun5_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun4_ws/install/fun5_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun4_ws/install/fun4_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun4_ws/install/fun4_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun5_ws/install/fun5_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun5_ws/install/fun5_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/turtlesim_plus_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/turtlesim_plus/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/turtle_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/lecture2/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/lab1_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/lab1/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/example_description/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/controller_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/RoboticsDev2024/install/motorsim_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/RoboticsDev2024/install/motorsim/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/kraiwich/fun4_ws/install/fun5_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun4_ws/install/fun5_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun4_ws/install/fun4_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun4_ws/install/fun4_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun5_ws/install/fun5_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/fun5_ws/install/fun5_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/turtlesim_plus_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/turtlesim_plus/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/turtle_bringup/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/lecture2/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/lab1_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/lab1/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/example_description/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/ros2_ws/install/controller_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/RoboticsDev2024/install/motorsim_interfaces/local/lib/python3.10/dist-packages",
+        "/home/kraiwich/RoboticsDev2024/install/motorsim/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
