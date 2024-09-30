@@ -11,7 +11,6 @@ from geometry_msgs.msg import PoseStamped
 from spatialmath import *
 from sensor_msgs.msg import JointState
 
-
 """
 Mode state
 0 is not ready
@@ -32,18 +31,18 @@ class ControllerNode(Node):
         """PUB"""
         self.joint_pub = self.create_publisher(JointState, "/joint_states", 10)
         self.endeffector_pub = self.create_publisher(PoseStamped, "/end_effector", 10)  
-        self.target_pub = self.create_publisher(PoseStamped,'/target',10) 
 
         """VALUE"""
         self.mode_sate = 0
         self.controll_state = 1
+        self.requesttarget_state = False
 
         """Service"""
         self.create_service(Modeselect,'/mode',self.Modeselect_callback) #Mode Secect Service
         self.create_service(Datapoint,'/target_mannal',self.Datapoint_callback) #Data Point
         self.create_service(Checkstate,'/checkcontroller_state',self.Checkcontrollerstate_callback)
         self.create_service(Checkstate,'/checkmode_state',self.Checkmode_callback)
-
+        
         """Clinet"""
         self.gettarget_client = self.create_client(Gettarget,'/get_target')
 
@@ -53,7 +52,7 @@ class ControllerNode(Node):
             rtb.RevoluteMDH(d=-120, alpha=-np.pi/2,offset=-np.pi/2),
             rtb.RevoluteMDH(d=100, a=250, alpha=0,offset=np.pi/2),
             rtb.RevoluteMDH(d=280,alpha=np.pi/2)
-        ], name='my_robot')
+        ], name='rrr_robot')
 
         """ROBOT JOINT VAL"""
         self.name = ["joint_1", "joint_2", "joint_3", "joint_4"]
@@ -76,6 +75,7 @@ class ControllerNode(Node):
 
             if self.mode_sate == 3 and self.controll_state == 1:
                 self.Gettatget_client_func()
+                self.requesttarget_state = True
             
             delta_q = self.target_q[i] - self.q[i]
 
@@ -171,7 +171,6 @@ class ControllerNode(Node):
                         self.target_q = find_ikine
                         self.get_logger().info('We can go to postition wait for going')
                         self.targetpub_func(x_data, y_data, z_data)
-
                 else:
                     pass
             else:

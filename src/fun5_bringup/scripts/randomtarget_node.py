@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import yaml.loader
 import rclpy
 from rclpy.node import Node
 
@@ -13,7 +12,9 @@ import numpy as np
 class RandomtargetposeNode(Node):
     def __init__(self):
         super().__init__('randomtargetpose_node')
-        
+
+        """PUB"""
+        self.target_pub = self.create_publisher(PoseStamped,'/target',10) 
 
         """CSV PATH"""
         csv_file_path = os.path.join(
@@ -42,7 +43,6 @@ class RandomtargetposeNode(Node):
             response.success = False
             response.message = "Notthing ....."
         return response
-
     
 def main(args=None):
     rclpy.init(args=args)

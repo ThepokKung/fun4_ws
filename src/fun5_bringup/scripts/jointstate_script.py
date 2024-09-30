@@ -29,7 +29,6 @@ class DummyNode(Node):
             msg.name.append(self.name[i])
         self.joint_pub.publish(msg)
         
-        
 def main(args=None):
     rclpy.init(args=args)
     node = DummyNode()
