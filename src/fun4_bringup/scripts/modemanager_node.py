@@ -3,7 +3,7 @@
 import rclpy
 from rclpy.node import Node
 
-from fun4_interfaces.srv import Modeselect, Checkstate
+from fun4_interfaces.srv import Modeselect, Checkstate, Setstate
 
 """
 Mode state
@@ -26,12 +26,17 @@ class ModeManagerNode(Node):
         self.mode_sate = 0
         self.controll_state = 1
 
-        self.create_service(Modeselect,'/mode',self.Modeselect_callback) #Mode Secect Service
+        """SERVICE"""
+        self.create_service(Modeselect,'/mode',self.Modeselect_callback)
+
+        """CLIENT"""
+        self.ipk_mode_client = self.create_client(Setstate,'/setipk_mode')
 
     def Modeselect_callback(self, request, response):
         if self.controll_state != 2:
             if request.modeselect == 1:
                 self.mode_sate = 1
+                self.Setipk_mode(True)
                 response.success = True
                 response.message = 'You select Mode "1" -> Inverse Pose Kinematics Mode (IPK)'
                 self.get_logger().info('You select Mode "1" -> Inverse Pose Kinematics Mode (IPK)')
@@ -54,6 +59,11 @@ class ModeManagerNode(Node):
             response.message = 'Controller is working now'
             self.get_logger().info('Controller is working now')
         return response
+    
+    def Setipk_mode(self,on):
+        msg = Setstate.Request()
+        msg.setstate = on
+        self.ipk_mode_client.call_async(msg)
     
 def main(args=None):
     rclpy.init(args=args)

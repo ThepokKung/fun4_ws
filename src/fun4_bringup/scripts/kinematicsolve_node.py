@@ -6,7 +6,7 @@ from rclpy.node import Node
 import roboticstoolbox as rtb
 import numpy as np
 from spatialmath import SE3
-from fun4_interfaces.srv import Wantink
+from fun4_interfaces.srv import Wantink,Getq
 
 class KinematicsSolverNode(Node):
     def __init__(self):
@@ -31,6 +31,9 @@ class KinematicsSolverNode(Node):
 
         """SERVICE"""
         self.create_service(Wantink,'/want_ink',self.Wantipk_callback)
+
+        """CLIENT"""
+        self.getq_clinet = self.create_client(Getq,'/get_q')
 
         """Start node text"""
         self.get_logger().info(f'Starting {self.get_namespace()}/{self.get_name()}') 
@@ -82,43 +85,54 @@ class KinematicsSolverNode(Node):
     def Find_ipk(self, x, y, z):
         goal_target = SE3(x, y, z)
         
+        self.Getq_func()
+    
         solutions = []
         best_solution = None
         min_norm = float('inf')
 
-        # Attempt to find a solution multiple times
         for i in range(10):
-            # Random initial joint angles
             initial_joint_angles = np.random.uniform(low=-np.pi, high=np.pi, size=4)
             
-            # Perform IK using the Levenberg-Marquardt solver
             solution = self.robot.ikine_LM(goal_target, q0=initial_joint_angles, mask=[1, 1, 1, 0, 0, 0])
 
             if solution.success:
-                # Check if the solution is unique (avoid very similar solutions)
                 is_unique = all(not np.allclose(solution.q, s, atol=1e-2) for s in solutions)
                 
                 if is_unique:
                     solutions.append(solution.q.tolist())
 
-                    # Compute the norm relative to current joint configuration
                     norm = np.linalg.norm(np.array(solution.q) - np.array(self.q))
 
                     if norm < min_norm:
                         min_norm = norm
                         best_solution = solution.q.tolist()
 
-        # Return the best solution, or a default value if none found
         return best_solution if best_solution is not None else [0.0, 0.0, 0.0, 0.0]
     
     def Wantipk_callback(self,request,response):
         if request is not None:
-            response.success = True
-            response.solution = self.Find_ipk(request.target.x,request.target.y,request.target.z)
+            temp = self.Find_ipk(request.target.x,request.target.y,request.target.z)
+            if temp != [0.0, 0.0, 0.0, 0.0]:
+                response.success = True
+                response.solution = temp
+            else:
+                response.success = False
+                response.solution = temp
         else:
             response.success = False
             response.solution = [0.0, 0.0, 0.0, 0.0] 
         return response
+    
+    def Getq_func(self):
+        msg = Getq.Request()
+        msg.giveqforme = True
+        result = self.getq_clinet.call(msg)
+
+        if result.success == True:
+            self.q[0] = result.q1
+            self.q[1] = result.q2
+            self.q[2] = result.q3
         
 def main(args=None):
     rclpy.init(args=args)

@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 
 from geometry_msgs.msg import PoseStamped
-from fun4_interfaces.srv import Gettarget,Checkstate
+from fun4_interfaces.srv import Checkstate
 from ament_index_python.packages import get_package_share_directory
 import os, random
 import numpy as np
@@ -23,10 +23,6 @@ class RandomtargetposeNode(Node):
             'workspace_points.csv'
         )
         self.workspace_points = np.loadtxt(csv_file_path, delimiter=',')
-
-        """SERVICE"""
-        self.create_service(Gettarget,'/get_target',self.Gettarget_callback)
-        self.create_service(Checkstate,'/targetdone_state',self.Targetdone_callback)
 
         """Clinet"""
         self.checktargetdone_client =self.create_client(Checkstate,'/targetdone_state')
