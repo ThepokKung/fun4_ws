@@ -1,7 +1,0 @@
-bool getdata
----
-float64 xtarget
-float64 ytarget
-float64 ztarget
-string message
-bool success

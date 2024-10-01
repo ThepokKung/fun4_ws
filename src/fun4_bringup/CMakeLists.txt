@@ -28,7 +28,8 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   scripts/randomtarget_node.py
-  scripts/controller_node.py
+  scripts/kinematicsolve_node.py
+  scripts/robotcontroller_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

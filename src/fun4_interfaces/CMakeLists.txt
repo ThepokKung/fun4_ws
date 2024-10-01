@@ -28,9 +28,10 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/Modeselect.srv"
-  "srv/Datapoint.srv"
   "srv/Checkstate.srv"
-  "srv/Gettarget.srv"
+  "srv/Wantink.srv"
+  "srv/Datapoint.srv"
+  "srv/Qtarget.srv"
   DEPENDENCIES geometry_msgs std_msgs # Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
 )
 

@@ -33,12 +33,11 @@ class ControllerNode(Node):
         self.endeffector_pub = self.create_publisher(PoseStamped, "/end_effector", 10)  
 
         """VALUE"""
-        self.mode_sate = 0
+        self.mode_sate = 1
         self.controll_state = 1
         self.requesttarget_state = False
 
         """Service"""
-        self.create_service(Modeselect,'/mode',self.Modeselect_callback) #Mode Secect Service
         self.create_service(Datapoint,'/target_mannal',self.Datapoint_callback) #Data Point
         self.create_service(Checkstate,'/checkcontroller_state',self.Checkcontrollerstate_callback)
         self.create_service(Checkstate,'/checkmode_state',self.Checkmode_callback)
@@ -77,7 +76,6 @@ class ControllerNode(Node):
             if self.mode_sate == 3 and self.controll_state == 1 and not self.requesttarget_state:
                 self.Gettatget_client_func()
                 self.requesttarget_state = True
-                # self.requesttarget_state = True
             
             delta_q = self.target_q[i] - self.q[i]
 
@@ -127,7 +125,7 @@ class ControllerNode(Node):
                     if norm < min_norm:
                         min_norm = norm
                         best_solution = solution.q.tolist()
-
+        print(best_solution)
         return best_solution 
     
     def Endeffector_pub_func(self):
@@ -177,40 +175,12 @@ class ControllerNode(Node):
                         self.controll_state = 2
                         self.target_q = find_ikine
                         self.get_logger().info('We can go to postition wait for going')
-                        # self.targetpub_func(x_data, y_data, z_data)
                 else:
                     pass
             else:
                 pass
         except Exception as e:
             self.get_logger().error(f"Service call failed with error: {e}")
-
-    def Modeselect_callback(self, request, response):
-        if self.controll_state != 2:
-            if request.modeselect == 1:
-                self.mode_sate = 1
-                response.success = True
-                response.message = 'You select Mode "1" -> Inverse Pose Kinematics Mode (IPK)'
-                self.get_logger().info('You select Mode "1" -> Inverse Pose Kinematics Mode (IPK)')
-            elif request.modeselect == 2:
-                self.mode_sate = 2
-                response.success = True
-                response.message = 'You select Mode "2" -> Tele-operation Mode (Teleop)'
-                self.get_logger().info('You select Mode "2" -> Tele-operation Mode (Teleop)')
-            elif request.modeselect == 3:
-                self.mode_sate = 3
-                response.success = True
-                response.message = 'You select Mode "3" -> Autonomous Mode (Auto)'
-                self.get_logger().info('You select Mode "3" -> Autonomous Mode (Auto)')
-            else:
-                response.success = False
-                response.message = f'You select Mode "{request.modeselect}" -> no mode'
-                self.get_logger().info(f'You select Mode "{request.modeselect}" -> no mode' )
-        else:
-            response.success = False
-            response.message = 'Controller is working now'
-            self.get_logger().info('Controller is working now')
-        return response
     
     def Datapoint_callback(self,request,response):
         if self.mode_sate == 1 and self.controll_state == 1:
