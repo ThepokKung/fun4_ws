@@ -15,7 +15,6 @@ class RobotControllerNode(Node):
 
         """STATE"""
         self.controller_state = 1
-        # self.mode_state = 0
         self.request_target = False
 
         """ROBOT STATE"""
@@ -52,8 +51,6 @@ class RobotControllerNode(Node):
 
         if all(abs(self.q[i] - self.target_q[i]) <= 0.1 for i in range(len(self.q))):
             self.controller_state = 1
-            # self.get_logger().info('Reached target state')
-            pass
 
         self.joint_pub.publish(msg)
 
