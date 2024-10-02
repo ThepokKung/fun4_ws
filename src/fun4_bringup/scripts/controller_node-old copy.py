@@ -219,8 +219,6 @@ class ControllerNode(Node):
             self.get_logger().info(f'Now mode state is {self.mode_sate}')
         return response
     
-    
-
 def main(args=None):
     rclpy.init(args=args)
     node = ControllerNode()

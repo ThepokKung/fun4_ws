@@ -30,8 +30,9 @@ install(PROGRAMS
   scripts/randomtarget_node.py
   scripts/kinematicsolve_node.py
   scripts/robotcontroller_node.py
-  scripts/ipk_node.py
   scripts/modemanager_node.py
+  scripts/mode_ipk_node.py
+  scripts/mode_auto_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 
 from geometry_msgs.msg import PoseStamped
-from fun4_interfaces.srv import Checkstate
+from fun4_interfaces.srv import Checkstate,Gettarget
 from ament_index_python.packages import get_package_share_directory
 import os, random
 import numpy as np
@@ -24,12 +24,14 @@ class RandomtargetposeNode(Node):
         )
         self.workspace_points = np.loadtxt(csv_file_path, delimiter=',')
 
+        """SERVICE"""
+        self.create_service(Gettarget,'/get_target',self.Gettarget_callback)
+
         """Clinet"""
         self.checktargetdone_client =self.create_client(Checkstate,'/targetdone_state')
 
         """Start node text"""
         self.get_logger().info(f'Starting {self.get_namespace()}/{self.get_name()}') 
-
 
     def Gettarget_callback(self, request, response):
         if request.getdata == True:
@@ -59,17 +61,6 @@ class RandomtargetposeNode(Node):
         self.get_logger().info(f'Pub target data x :{msg.pose.position.x}, y : {msg.pose.position.y},z : {msg.pose.position.z}')
         self.target_pub.publish(msg)
 
-    def Targetdone_callback(self,request,response):
-        if request.checkstate == True:
-            response.success = True
-            response.message = "Now i know you done"
-            self.get_logger().info(response.message)
-        else:
-            response.success = False
-            response.message = "Notthing..."
-            self.get_logger().info(response.message)
-        return response
-    
 def main(args=None):
     rclpy.init(args=args)
     node = RandomtargetposeNode()

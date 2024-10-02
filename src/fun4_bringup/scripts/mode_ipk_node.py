@@ -2,7 +2,7 @@
 
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Point
+# from geometry_msgs.msg import Point
 from fun4_interfaces.srv import Qtarget, Wantink, Datapoint,Setstate,Checkstate
 
 from rclpy.executors import MultiThreadedExecutor
@@ -11,7 +11,7 @@ from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 
 class IPKNode(Node):
     def __init__(self):
-        super().__init__('ipk_node')
+        super().__init__('mode_ipk_node')
 
         """VALUE"""
         self.target_q = [0.0, 0.0, 0.0, 0.0]
@@ -58,7 +58,7 @@ class IPKNode(Node):
     #         response.success = False
     #         response.message = 'Failed to calculate IK'
     #         self.get_logger().error("Failed to calculate IK")
-    #         return responsehttps://www.facebook.com/
+    #         return response
 
     # def robotcheck_response(self,future,result,response):
     #     try:
