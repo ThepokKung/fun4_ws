@@ -7,6 +7,7 @@ import roboticstoolbox as rtb
 import numpy as np
 from spatialmath import SE3
 from fun4_interfaces.srv import Wantink,Getq
+from geometry_msgs.msg import PoseStamped
 
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
@@ -15,6 +16,9 @@ from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 class KinematicsSolverNode(Node):
     def __init__(self):
         super().__init__('kinematics_solver_node')
+
+        """PUB"""
+        self.endeffector_pub = self.create_publisher(PoseStamped, "/end_effector", 10)  
 
         """ROBOT"""
         self.robot = rtb.DHRobot([
@@ -40,93 +44,17 @@ class KinematicsSolverNode(Node):
         self.get_q_cb = MutuallyExclusiveCallbackGroup()
         self.getq_clinet = self.create_client(Getq,'/get_q',callback_group=self.get_q_cb)
 
+        """TIMER"""
+        self.create_timer(self.dt,self.timmer_loop)
+
         """Start node text"""
         self.get_logger().info(f'Starting : /{self.get_name()}') 
-
-    # def Find_ink(self, x, y, z):
-    #     goal_target = SE3(x, y, z)
-        
-    #     self.Getq_func()
-
-        # msg = Getq.Request()
-        # msg.giveqforme = True
-        # result = self.getq_clinet.call(msg)
-
-        # if result.success == True:
-        #     self.q[0] = result.q1
-        #     self.q[1] = result.q2
-        #     self.q[2] = result.q3
-    
-    #     solutions = []
-    #     best_solution = None
-    #     min_norm = float('inf')
-
-    #     for i in range(10):
-    #         initial_joint_angles = np.random.uniform(low=-np.pi, high=np.pi, size=4)
-            
-    #         solution = self.robot.ikine_LM(goal_target, q0=initial_joint_angles, mask=[1, 1, 1, 0, 0, 0])
-
-    #         if solution.success:
-    #             is_unique = all(not np.allclose(solution.q, s, atol=1e-2) for s in solutions)
-                
-    #             if is_unique:
-    #                 solutions.append(solution.q.tolist())
-
-    #                 norm = np.linalg.norm(np.array(solution.q) - np.array(self.q))
-
-    #                 if norm < min_norm:
-    #                     min_norm = norm
-    #                     best_solution = solution.q.tolist()
-
-    #     return best_solution if best_solution is not None else [0.0, 0.0, 0.0, 0.0]
-
-    # def Find_ikine(self,x,y,z):
-    #     goal_pose = SE3(x,y,z)
-
-        # self.Getq_func()
-
-    #     solutions = []
-    #     best_solution = None
-    #     min_norm = float('inf') 
-
-    #     for i in range(10):
-    #         initial_joint_angles = np.random.uniform(low=-np.pi, high=np.pi, size=4)
-    
-    #         solution = self.robot.ikine_LM(goal_pose, q0=initial_joint_angles, mask=[1, 1, 1, 0, 0, 0])
-
-    #         if solution.success:
-    #             is_unique = True
-    #             for s in solutions:
-    #                 if np.allclose(solution.q, s, atol=1e-2):  
-    #                     is_unique = False
-    #                     break
-                    
-    #             if is_unique:
-    #                 solutions.append(solution.q.tolist())
-    #                 norm = np.linalg.norm(np.array(solution.q) - np.array(self.q))
-
-    #                 if norm < min_norm:
-    #                     min_norm = norm
-    #                     best_solution = solution.q.tolist()
-
-    #     return best_solution 
-
 
     """FIND INK"""
     def Find_ikine(self,x,y,z):
         goal_target = SE3(x,y,z)
 
         initial_joint_angles = np.random.uniform(low=-np.pi, high=np.pi, size=4)
-
-        # self.Getq_func()
-        msg = Getq.Request()
-        msg.giveqforme = True
-        result = self.getq_clinet.call(msg)
-
-        if result.success == True:
-            self.q[0] = result.q1
-            self.q[1] = result.q2
-            self.q[2] = result.q3
 
         solutions = []
         best_solution = None
@@ -166,8 +94,32 @@ class KinematicsSolverNode(Node):
         if best_solution is None:
             return [0.0, 0.0, 0.0, 0.0] 
         return best_solution 
-    
     """END FIND INK"""
+
+    def timmer_loop(self):
+        msg = Getq.Request()
+        msg.giveqforme = True
+        result = self.getq_clinet.call(msg)
+
+        if result.success == True:
+            self.q[0] = result.q1
+            self.q[1] = result.q2
+            self.q[2] = result.q3
+
+        self.Endeffector_pub_func()
+
+    def Endeffector_pub_func(self):
+        end_effector_pose = self.robot.fkine(self.q)
+
+        msg = PoseStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = "link_0"
+
+        msg.pose.position.x = end_effector_pose.t[0] /1000
+        msg.pose.position.y = end_effector_pose.t[1] /1000
+        msg.pose.position.z = end_effector_pose.t[2] /1000
+
+        self.endeffector_pub.publish(msg)
     
 
     def Wantink_callback(self,request,response):
@@ -200,7 +152,6 @@ class KinematicsSolverNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = KinematicsSolverNode()
-    # rclpy.spin(node)
 
     executor = MultiThreadedExecutor()
     executor.add_node(node)

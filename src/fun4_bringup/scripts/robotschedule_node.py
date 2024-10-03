@@ -5,15 +5,18 @@ from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 from fun4_interfaces.srv import Modeselect, Checkstate, Datapoint, Wantink, Qtarget, Gettarget
+# from geometry_msgs.msg import Twist
+
 
 class RobotscheduleNode(Node):
     def __init__(self):
         super().__init__('robotschedule_node')
 
         """VALUE"""
-        self.dt = 0.01
+        self.dt = 0.1
         self.mode_sate = 0
         self.controll_state = 1
+        self.request_gettarget = False
 
         """SERVICE"""
         self.create_service(Modeselect, '/mode', self.Modeselect_callback)
@@ -75,6 +78,7 @@ class RobotscheduleNode(Node):
             response = future.result()
             if response.success:
                 self.controll_state = 1
+                self.request_gettarget = False
             else:
                 self.controll_state = 2
         except Exception as e:
@@ -144,9 +148,10 @@ class RobotscheduleNode(Node):
         if self.mode_sate == 3:
             self.get_logger().info("On mode 3 ") #DEBUG
             self.Check_controller_func()
-            if self.controll_state == 1:
+            if self.controll_state == 1 and self.request_gettarget == False:
                 self.get_logger().info("CONTROLL REDAY") #DEBUG
                 self.Gettarget_fucn()
+                
         pass
 
     """GET TARGET"""
@@ -166,7 +171,7 @@ class RobotscheduleNode(Node):
                 cal_target.target.y = response.ytarget
                 cal_target.target.z = response.ztarget
                 self.get_logger().info(f'IPK GO TARGET: {cal_target.target}')  # DEBUG
-
+                self.request_gettarget = True
                 future_ink_result = self.want_ink_clinet.call_async(cal_target)
                 future_ink_result.add_done_callback(lambda future: self.ink_result_response(future, response))
             else:

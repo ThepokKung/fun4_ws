@@ -18,7 +18,7 @@ class RandomtargetposeNode(Node):
 
         """CSV PATH"""
         csv_file_path = os.path.join(
-            get_package_share_directory('fun5_bringup'),
+            get_package_share_directory('fun4_bringup'),
             'config',
             'workspace_points.csv'
         )

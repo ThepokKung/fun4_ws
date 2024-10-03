@@ -7,7 +7,7 @@ import xacro
 def generate_launch_description():
     
     pkg = get_package_share_directory('fun4_bringup')
-    rviz_path = os.path.join(pkg,'config','display.rviz')
+    rviz_path = os.path.join(pkg,'config','display2.rviz')
     rviz = Node(
         package='rviz2',
         executable='rviz2',
@@ -33,14 +33,29 @@ def generate_launch_description():
     """Define"""
     fun4_bringup_pkg = 'fun4_bringup'
 
-    contoller_node = Node(
+    robotschedule_node = Node(
             package=fun4_bringup_pkg,
             namespace='',
-            executable='controller_node.py',
-            name='controller_node'
+            executable='robotschedule_node.py',
+            name='robotschedule_node'
         )
-    
-    launch_description.add_action(contoller_node)
+    launch_description.add_action(robotschedule_node)
+
+    robotcontroller_node = Node(
+            package=fun4_bringup_pkg,
+            namespace='',
+            executable='robotcontroller_node.py',
+            name='robotcontroller_node'
+        )
+    launch_description.add_action(robotcontroller_node)
+
+    kinematicsolve_node = Node(
+            package=fun4_bringup_pkg,
+            namespace='',
+            executable='kinematicsolve_node.py',
+            name='kinematicsolve_node'
+        )
+    launch_description.add_action(kinematicsolve_node)
 
     randomtarget_node = Node(
             package=fun4_bringup_pkg,
@@ -48,6 +63,6 @@ def generate_launch_description():
             executable='randomtarget_node.py',
             name='randomtarget_node'
         )
-    
     launch_description.add_action(randomtarget_node)
+
     return launch_description

@@ -1,7 +1,25 @@
 
 # FUN4: Hello world
-
 ทำออกแบบระบบที่ใช้ในการควบคุมแขนกล 3 DOF
+
+### !!!Path update 1.2 !!!
+แยก Node ออกจากกันให้ดูเป็น ROS มากขึ้น(แน่นอนแตกยับ)
+
+
+Old node
+
+* controller_node
+* randomtarget_node
+
+New node
+
+* robotschedule_node
+* robotcontroller_node
+* randomtarget_node
+* kinematicsolve_node
+
+
+ทำเต็ม 8/10 ไม่มี Mode2 เนื่องจากไม่เข้าใจจริงๆ
 
 ## Part 1 Descriptiion
 
@@ -28,17 +46,12 @@
 
 และเราก็ได้นำ CSV ที่ได้จาก Python_Proof ไปไว้ใน /fun5_bringup/config/workspace_points.csv
 
-### Part1.2 ทำการสร้าง Node สุ่มเป้าหมายปลายมือ
+### Part1.2,1.3 ทำการสร้าง Node สุ่มเป้าหมายปลายมือ และ ทำการส่งตำแหน่งปลายมือแขนกล
 หลังจากที่หา Workspace ของแขนกลเราได้ เราจะทำการสร้าง Node ที่ Random จาก workspace ที่เราเก็บไว้ และส่งผ่าน Topic 
 ```topic
 /target (msg type : PoseStamped)
 ```
 และแสดงผลผ่าน RVIZ2
-
-![](image/1-6.png)
-
-
-### Part1.3 ทำการส่งตำแหน่งปลายมือแขนกล
 
 ส่งต่ำแหน่งปลายมือของแขนกลผ่าน Topic 
 ```Topic
@@ -46,11 +59,19 @@
 ```
 และแสดงผลผ่าน RVIZ2
 
+ตำแหน่งปลายมือมาจากเราหา FK จาก Q ต่างๆใน kinematicsolve_node ของเรา
+
 
 ![](image/1-5.png)
 
+![](image/1-6.png)
 
-ตำแหน่งปลายมือมาจากเราหา FK จาก Q ต่างๆใน Controller node ของเรา
+![](image/1-7.png)
+
+
+(อันปัจจุบัน Patch 1.2)
+
+
 ## Part 2 Descrption
 
 ### Controller
@@ -74,6 +95,7 @@ Mode (Teleop) และ Autonomous Mode (Auto)
 ![](image/2-1.gif)
 
 * /target_mannal ใช้สำหรับการส่งค่าตำแหน่งที่จะให้ End_effector ไปโดยเราจะกรอกลงไปผ่าน RQT
+
 ![](image/2-2.png)
 
 
@@ -85,8 +107,8 @@ Mode (Teleop) และ Autonomous Mode (Auto)
 
 1. Clone Project from github
 ```git clone
-git clone https://github.com/ThepokKung/fun5_ws.git
-cd fun5_ws 
+git clone https://github.com/ThepokKung/fun4_ws.git
+cd fun4_ws 
 ```
 2. Build Project
 ```colon build 
@@ -102,10 +124,10 @@ source install/setup.bash
 4. Launch Project
 เปิดใช้งาน
 ```launch 
-ros2 launch fun5_bringup fun5_bringup.launch.py
+ros2 launch fun4_bringup fun4_bringup.launch.py
 ```
 
-![](image/3-1.gif)
+![](image/N3-1.gif)
 
 5. วิธีการใช้งาน
 เราจะเรียกใช้งาน 
@@ -126,14 +148,18 @@ Service : /mode
 
 ### Mode 1
 
-ตอนที่อยู่ที่ Mode 1 จะสามารถส่ง ตำแหน่งที่เราต้องการจะไปได้ จะมีผลลัพท์ส่งกลับมาว่าไปได้หรือไม่ โดยจะส่งผ่าน 
+ตอนที่อยู่ที่ Mode 1 จะสามารถส่ง ตำแหน่งที่เราต้องการจะไปได้ โดยจะส่งผ่าน 
 ```
 service : /target_mannel
 ```
 
-![](image/3-3.png)
+![](image/3-5.png)
 
-![](image/3-4.png)
+!!! ถ้าส่งไปได้ ยังจะก็จะขึ้นว่า TRUE อยู่ดี ต้องดูใน RIVZ2 ว่าไปได้ไหม
+
+<!-- ![](image/3-3.png)
+
+![](image/3-4.png) -->
 
 ### Mode 3
 
