@@ -34,8 +34,8 @@ class RobotControllerNode(Node):
         self.create_service(Getq,'/get_q',self.Getq_callback)
         self.create_service(Checkstate,'/checkcontroller_state',self.Checkcontroller_callback)
 
-        """Start node text"""
-        self.get_logger().info(f'Starting : /{self.get_name()}') 
+        """START TEXT"""
+        self.get_logger().info('Robot Controller Node started')
 
     def sim_loop(self):
         msg = JointState()

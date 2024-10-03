@@ -49,7 +49,14 @@ def generate_launch_description():
             name='robotcontroller_node'
         )
     launch_description.add_action(robotcontroller_node)
-
+    
+    # robotschedule_node = Node(
+    #         package=fun4_bringup_pkg,
+    #         namespace='',
+    #         executable='robotschedule_node.py',
+    #         name='robotschedule_node'
+    #     )
+    # launch_description.add_action(robotschedule_node)
 
     # ipk_node = Node(
     #         package=fun4_bringup_pkg,
@@ -59,13 +66,13 @@ def generate_launch_description():
     #     )
     # launch_description.add_action(ipk_node)
 
-    modemanager_node = Node(
-            package=fun4_bringup_pkg,
-            namespace='',
-            executable='modemanager_node.py',
-            name='modemanager_node'
-        )
-    launch_description.add_action(modemanager_node)
+    # modemanager_node = Node(
+    #         package=fun4_bringup_pkg,
+    #         namespace='',
+    #         executable='modemanager_node.py',
+    #         name='modemanager_node'
+    #     )
+    # launch_description.add_action(modemanager_node)
     
     
     return launch_description

@@ -15,7 +15,7 @@ class IPKNode(Node):
 
         """VALUE"""
         self.target_q = [0.0, 0.0, 0.0, 0.0]
-        self.my_state = True
+        self.my_state = False
 
         """SERVICE"""
         self.create_service(Datapoint, '/target_manual', self.Target_callback)

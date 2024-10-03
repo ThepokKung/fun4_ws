@@ -41,7 +41,7 @@ class KinematicsSolverNode(Node):
         self.getq_clinet = self.create_client(Getq,'/get_q',callback_group=self.get_q_cb)
 
         """Start node text"""
-        self.get_logger().info(f'Starting : /{self.get_name()}') 
+        self.get_logger().info(f'Starting {self.get_namespace()}/{self.get_name()}') 
 
     # def Find_ink(self, x, y, z):
     #     goal_target = SE3(x, y, z)
@@ -114,6 +114,7 @@ class KinematicsSolverNode(Node):
     def Find_ikine(self,x,y,z):
         goal_target = SE3(x,y,z)
 
+        # self.Getq_func()
         initial_joint_angles = np.random.uniform(low=-np.pi, high=np.pi, size=4)
 
         solutions = []
