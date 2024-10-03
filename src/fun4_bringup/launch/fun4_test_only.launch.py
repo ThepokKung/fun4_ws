@@ -33,23 +33,6 @@ def generate_launch_description():
     """Define"""
     fun4_bringup_pkg = 'fun4_bringup'
 
-    kinematicsolve_node = Node(
-            package=fun4_bringup_pkg,
-            namespace='',
-            executable='kinematicsolve_node.py',
-            name='kinematicsolve_node'
-        )
-    
-    launch_description.add_action(kinematicsolve_node)
-
-    robotcontroller_node = Node(
-            package=fun4_bringup_pkg,
-            namespace='',
-            executable='robotcontroller_node.py',
-            name='robotcontroller_node'
-        )
-    launch_description.add_action(robotcontroller_node)
-    
     # robotschedule_node = Node(
     #         package=fun4_bringup_pkg,
     #         namespace='',
@@ -58,21 +41,28 @@ def generate_launch_description():
     #     )
     # launch_description.add_action(robotschedule_node)
 
-    # ipk_node = Node(
-    #         package=fun4_bringup_pkg,
-    #         namespace='',
-    #         executable='ipk_node.py',
-    #         name='ipk_node'
-    #     )
-    # launch_description.add_action(ipk_node)
+    robotcontroller_node = Node(
+            package=fun4_bringup_pkg,
+            namespace='',
+            executable='robotcontroller_node.py',
+            name='robotcontroller_node'
+        )
+    launch_description.add_action(robotcontroller_node)
 
-    # modemanager_node = Node(
-    #         package=fun4_bringup_pkg,
-    #         namespace='',
-    #         executable='modemanager_node.py',
-    #         name='modemanager_node'
-    #     )
-    # launch_description.add_action(modemanager_node)
-    
-    
+    kinematicsolve_node = Node(
+            package=fun4_bringup_pkg,
+            namespace='',
+            executable='kinematicsolve_node.py',
+            name='kinematicsolve_node'
+        )
+    launch_description.add_action(kinematicsolve_node)
+
+    randomtarget_node = Node(
+            package=fun4_bringup_pkg,
+            namespace='',
+            executable='randomtarget_node.py',
+            name='randomtarget_node'
+        )
+    launch_description.add_action(randomtarget_node)
+
     return launch_description

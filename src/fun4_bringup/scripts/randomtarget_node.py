@@ -27,9 +27,6 @@ class RandomtargetposeNode(Node):
         """SERVICE"""
         self.create_service(Gettarget,'/get_target',self.Gettarget_callback)
 
-        """Clinet"""
-        self.checktargetdone_client =self.create_client(Checkstate,'/targetdone_state')
-
         """Start node text"""
         self.get_logger().info(f'Starting : /{self.get_name()}') 
 

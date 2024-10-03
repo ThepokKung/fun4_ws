@@ -48,14 +48,14 @@ class KinematicsSolverNode(Node):
         
     #     self.Getq_func()
 
-    #     # msg = Getq.Request()
-    #     # msg.giveqforme = True
-    #     # result = self.getq_clinet.call(msg)
+        # msg = Getq.Request()
+        # msg.giveqforme = True
+        # result = self.getq_clinet.call(msg)
 
-    #     # if result.success == True:
-    #     #     self.q[0] = result.q1
-    #     #     self.q[1] = result.q2
-    #     #     self.q[2] = result.q3
+        # if result.success == True:
+        #     self.q[0] = result.q1
+        #     self.q[1] = result.q2
+        #     self.q[2] = result.q3
     
     #     solutions = []
     #     best_solution = None
@@ -83,7 +83,7 @@ class KinematicsSolverNode(Node):
     # def Find_ikine(self,x,y,z):
     #     goal_pose = SE3(x,y,z)
 
-    #     self.Getq_func()
+        # self.Getq_func()
 
     #     solutions = []
     #     best_solution = None
@@ -111,10 +111,22 @@ class KinematicsSolverNode(Node):
 
     #     return best_solution 
 
+
+    """FIND INK"""
     def Find_ikine(self,x,y,z):
         goal_target = SE3(x,y,z)
 
         initial_joint_angles = np.random.uniform(low=-np.pi, high=np.pi, size=4)
+
+        # self.Getq_func()
+        msg = Getq.Request()
+        msg.giveqforme = True
+        result = self.getq_clinet.call(msg)
+
+        if result.success == True:
+            self.q[0] = result.q1
+            self.q[1] = result.q2
+            self.q[2] = result.q3
 
         solutions = []
         best_solution = None
@@ -155,6 +167,9 @@ class KinematicsSolverNode(Node):
             return [0.0, 0.0, 0.0, 0.0] 
         return best_solution 
     
+    """END FIND INK"""
+    
+
     def Wantink_callback(self,request,response):
         if request is not None:
             temp = self.Find_ikine(request.target.x,request.target.y,request.target.z)
